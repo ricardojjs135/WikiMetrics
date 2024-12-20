@@ -13,6 +13,7 @@ Desenvolver um protótipo funcional que leia e analise dados de pessoas presente
 - Calcular métricas demográficas, incluindo:
   - Número de homens e mulheres.
   - Religião mais predominante.
+  - Outras métricas que serão analisadas posteriormente.
 - Identificar tendências adicionais, como faixas etárias predominantes ou presença de categorias específicas.
 
 ### 3. Visualização dos Resultados
