@@ -1,0 +1,3 @@
+[submodule "WikiMetricsMain/WikiMetricsMain/vcpkg"]
+	path = WikiMetricsMain/WikiMetricsMain/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
