@@ -25,10 +25,8 @@ def generate_pie_chart(data, title="Pie Chart"):
     categories = list(data.keys())
     percentages = [item[0] for item in data.values()]
     
-    plt.figure(figsize=(10, 8))
-    plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140)
-    plt.axis('equal')  
-    
+    plt.figure(figsize=(14, 12))
+    plt.pie(percentages, labels=categories, autopct='%1.1f%%', startangle=140, textprops={'fontsize': 8}) 
     plt.title(title, pad=30)  
     
     plt.show()
@@ -57,10 +55,21 @@ def generate_bar_chart(data, title="Bar Chart"):
     counts = [item[1] for item in data.values()]
     
     plt.figure(figsize=(10, 8))
-    plt.barh(categories, counts, color='skyblue')
+    bars = plt.barh(categories, counts, color='skyblue')
+    
+    for bar, count in zip(bars, counts):
+        plt.text(
+            bar.get_width() + 1,
+            bar.get_y() + bar.get_height() / 2,
+            str(count),  
+            va='center',  
+            fontsize=10 
+        )
+    
     plt.xlabel('Quantidade')
     plt.title(title)
     plt.show()
+
 
 pie_chart_file_path_1 = 'WikiMetricsMain/piechartProfessions.txt'
 pie_chart_file_path_2 = 'WikiMetricsMain/piechartReligions.txt' 
@@ -70,11 +79,6 @@ pie_data_1 = read_pie_chart_file(pie_chart_file_path_1)
 pie_data_2 = read_pie_chart_file(pie_chart_file_path_2)
 bar_data = read_bar_chart_file(bar_chart_file_path)
 
-# Gerar o gráfico de barras
-generate_bar_chart(bar_data, title="Genders Ratio")
-
-# Gerar o primeiro gráfico de pizza
-generate_pie_chart(pie_data_1, title="Professions Ratio")
-
-# Gerar o segundo gráfico de pizza
-generate_pie_chart(pie_data_2, title="Religions Ratio")
+generate_bar_chart(bar_data, title="Proporção de Gêneros")
+generate_pie_chart(pie_data_1, title="Proporção de Profissões")
+generate_pie_chart(pie_data_2, title="Proporção de Religiões")

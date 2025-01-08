@@ -1,9 +1,9 @@
 Pie Chart
 ==========
-Candomblé      - 4.00% (1)
-Evangelicalismo - 4.00% (1)
-Presbiterianismo - 4.00% (1)
-ateísmo        - 8.00% (2)
-Igreja Católica - 48.00% (12)
-protestantismo  - 4.00% (1)
-catolicismo     - 28.00% (7)
+Outros          - 5.06% (4)
+catolicismo     - 79.75% (63)
+Judaísmo       - 2.53% (2)
+Q288928         - 2.53% (2)
+ateísmo        - 3.80% (3)
+Presbiterianismo - 2.53% (2)
+Candomblé      - 3.80% (3)

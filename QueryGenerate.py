@@ -1,5 +1,6 @@
 import sys
 import json
+import time
 import os
 from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import defaultdict
@@ -19,7 +20,7 @@ base_query = """SELECT DISTINCT ?human ?humanLabel ?sex_or_genderLabel ?country_
   
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "pt-br". }}
 }}
-LIMIT 50
+LIMIT 20
 OFFSET {offset}"""
 
 def get_results(endpoint_url, query):
@@ -30,15 +31,17 @@ def get_results(endpoint_url, query):
     return sparql.query().convert()
 
 def fetch_all_results(endpoint_url, base_query):
-    offset = 0
+    offset = 20
     batch = 1
     all_data = []
-    max_batches = 10  # Número máximo de lotes
+    max_batches = 100  
 
     while batch <= max_batches:  # Apenas para testes, modificar para "while True" quando for rodar o programa
         print(f"Consultando lote {batch} com OFFSET {offset}...")
         query = base_query.format(offset=offset)
         results = get_results(endpoint_url, query)
+
+        time.sleep(1)
 
         if not results["results"]["bindings"]: 
             print("Nenhum resultado restante.")

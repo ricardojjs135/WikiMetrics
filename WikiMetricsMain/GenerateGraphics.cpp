@@ -40,7 +40,7 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
     int total = 0;
     for (const auto &entry : data)
     {
-        total += entry.second;
+        total += entry.second; 
     }
 
     if (total == 0)
@@ -50,10 +50,40 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
         return;
     }
 
+    size_t categoryCount = data.size();
+
+    std::unordered_map<std::string, int> filteredData;
+    int otherTotal = 0;
+
+    if (categoryCount > 8)
+    {
+        for (const auto &entry : data)
+        {
+            double percentage = static_cast<double>(entry.second) / total * 100;
+            if (percentage > 1.5)
+            {
+                filteredData[entry.first] = entry.second;
+            }
+            else
+            {
+                otherTotal += entry.second; 
+            }
+        }
+
+        if (otherTotal > 0)
+        {
+            filteredData["Outros"] = otherTotal;
+        }
+    }
+    else
+    {
+        filteredData = data;
+    }
+
     file << "Pie Chart\n";
     file << "==========\n";
 
-    for (const auto &entry : data)
+    for (const auto &entry : filteredData)
     {
         double percentage = static_cast<double>(entry.second) / total * 100;
         file << std::setw(15) << std::left << entry.first 
