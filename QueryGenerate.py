@@ -1,9 +1,10 @@
 import sys
 import json
 import time
-import os
 from SPARQLWrapper import SPARQLWrapper, JSON
 from collections import defaultdict
+import os
+from datetime import datetime, timedelta
 
 endpoint_url = "https://query.wikidata.org/sparql"
 
@@ -19,39 +20,23 @@ base_query = """SELECT DISTINCT ?human ?humanLabel ?sex_or_genderLabel ?country_
   OPTIONAL {{ ?human wdt:P69 ?education. }}
   
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "pt-br". }}
+  FILTER(?date_of_birth >= "{start_date}"^^xsd:dateTime && ?date_of_birth < "{end_date}"^^xsd:dateTime)
 }}
-LIMIT 20
+LIMIT 8000
 OFFSET {offset}"""
 
 def get_results(endpoint_url, query):
-    user_agent = "WikiMetrics Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+    user_agent = "WikiMetrics Python3/%s.%s" % (sys.version_info[0], sys.version_info[1])
     sparql = SPARQLWrapper(endpoint_url, agent=user_agent)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
-    return sparql.query().convert()
-
-def fetch_all_results(endpoint_url, base_query):
-    offset = 20
-    batch = 1
-    all_data = []
-    max_batches = 100  
-
-    while batch <= max_batches:  # Apenas para testes, modificar para "while True" quando for rodar o programa
-        print(f"Consultando lote {batch} com OFFSET {offset}...")
-        query = base_query.format(offset=offset)
-        results = get_results(endpoint_url, query)
-
-        time.sleep(1)
-
-        if not results["results"]["bindings"]: 
-            print("Nenhum resultado restante.")
-            break
-
-        all_data.extend(results["results"]["bindings"])
-        offset += 50  
-        batch += 1    
-
-    return all_data
+    try:
+        response = sparql.query().response.read().decode("utf-8")
+        clean_response = response.replace("\n", "").replace("\r", "").replace("\t", "")  # Remover caracteres de controle
+        return json.loads(clean_response)
+    except json.JSONDecodeError as e:
+        print("Erro ao decodificar JSON após limpeza:", e)
+        raise
 
 def group_attributes(data):
     grouped_data = defaultdict(lambda: {
@@ -93,8 +78,63 @@ def save_grouped_data(grouped_data, output_file):
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(grouped_data, f, ensure_ascii=False, separators=(",", ":"))
 
-    print(f"Dados agrupados e minimizados salvos no arquivo '{output_file}'")
+    print(f"Dados do lote salvos no arquivo '{output_file}'")
 
-data = fetch_all_results(endpoint_url, base_query)
-grouped_data = group_attributes(data)
-save_grouped_data(grouped_data, "wikidata_final_results.json")
+def fetch_and_save_batches(endpoint_url, base_query, start_date, end_date):
+    offset = 0
+    batch = 1
+    
+    while True:
+        print(f"Consultando lote {batch}, data de {start_date} até {end_date} com OFFSET {offset}...")
+
+        query = base_query.format(start_date=start_date, end_date=end_date, offset=offset)
+
+        output_file = f"wikidata_lote_{batch}_{start_date}_{end_date}.json"
+
+        if os.path.exists(output_file):
+            print(f"Lote {batch} já existe. Pulando esse intervalo de datas.")
+        else:
+            results = get_results(endpoint_url, query)
+
+            if not results["results"]["bindings"]:
+                print("Nenhum resultado restante para esse intervalo de datas.")
+                break
+
+            grouped_data = group_attributes(results["results"]["bindings"])  # Processa os dados aqui
+            print(f"Lote {batch} salvo com {len(results['results']['bindings'])} registros.")
+
+
+            if len(results["results"]["bindings"]) < 8000:
+                print("Último lote com menos de 8000 resultados. Finalizando.")
+                save_grouped_data(grouped_data, output_file)  # Salva os dados processados
+                break
+
+            save_grouped_data(grouped_data, output_file)  # Salva os dados processados
+
+            offset += 8000  
+            batch += 1
+
+        time.sleep(15)
+
+    print("Processamento concluído!")
+
+#start_date = "1646-01-01"
+#end_date = "1855-01-01"
+start_date = "1984-11-30"
+end_date = "1994-11-28"
+current_date = datetime.now()
+count_queries = 1;
+addition = 2;
+
+while datetime.strptime(end_date, "%Y-%m-%d") < current_date:
+    print(f"\nQuery número {count_queries}")
+    fetch_and_save_batches(endpoint_url, base_query, start_date, end_date)
+
+    start_date = end_date;
+    end_date_obj = datetime.strptime(end_date, "%Y-%m-%d")
+    end_date_obj += timedelta(days=10*365)
+    end_date = end_date_obj.strftime("%Y-%m-%d")
+    time.sleep(20 + addition)
+    addition += 2
+    count_queries += 1
+    
