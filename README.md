@@ -21,7 +21,7 @@ Desenvolver um protótipo funcional que leia e analise dados de pessoas presente
 # Documentação
 
 ## Consulta de Dados da Wikidata
-Para consultar os dados da Wikidata, foi utilizado o site **https://query.wikidata.org/**, que utiliza consultas via SPARQL para obter os dados desejados. Ao gerar a query, o site disponibiliza um código em Python para acesso direto aos dados. Este código está contido no arquivo `QueryGenerate.py`.
+Para consultar os dados da Wikidata, foi utilizado o site **https://query.wikidata.org/**, que utiliza consultas via SPARQL para obter os dados desejados. Ao gerar e testar a query, foi-se criado um script: `QueryGenerate.py` para que extraia o resultado desta query, formate os dados e gere arquivos json como resultado.
 
 ### `QueryGenerate.py`
 Para executar este código, partindo do ponto de vista que o python e o pip estejam instalados na sua máquina, é necessário que rode o comando “pip install sparqlwrapper” no terminal.
