@@ -29,19 +29,19 @@ Caso você não tenha permissão para baixar bibliotecas externas, pode-se criar
 1. Criação do ambiente virtual: “python3 -m venv ~/venv”
 2. Ativação do ambiente virtual: “source ~/venv/bin/activate”
 3. Comando de instalação da biblioteca externa: “pip install sparqlwrapper”
-4. Para sair do ambiente virtual, utilize: “deactivate”
 5. Logo então, execute o código utilizando o comando “python QueryGenerate.py” (ou “python3 QueryGenerate.py”).
+6. Caso queira sair do ambiente virtual, utilize: “deactivate”
 
-Após a execução do código, um conjunto de arquivos json serão gerados em uma pasta chamada “jsonFiles”, com os nomes iniciando com “wikidata_lote_X_XXXX-XX-XX.json” contendo dados de todas as pessoas existentes na base do WikiData residentes do Brasil.
+Após a execução do código, um conjunto de arquivos json serão gerados em uma pasta chamada “jsonFiles”, com os nomes iniciando com “wikidata_lote_X_XXXX-XX-XX.json” contendo dados de todas as pessoas existentes na base do WikiData residentes no Brasil.
 
-OBS: Os arquivos são gerados com intervalos de data, pois uma única query não seria possível de rodar de uma vez pois o volume de dados é grande e daria timeOut, mesmo com esses intervalos de datas o programa pode parar em algum momento, caso pare, basta alterar as variáveis start_date e end_date de acordo com o primeiro lote com a última data gerada mostrada no terminal, e rodar o script novamente, para ele continuar de onde parou.
+OBS: Os arquivos são gerados com intervalos de data, pois uma única query não seria possível rodar de uma vez pois o volume de dados é grande e daria timeout, mesmo com esses intervalos de datas o programa pode parar em algum momento, caso pare, basta alterar as variáveis start_date e end_date de acordo com o primeiro lote com a última data gerada mostrada no terminal, e rodar o script novamente, para ele continuar de onde parou.
 
 ### `WikiMetricsMain`
 
 Após gerar o arquivo com os dados, entre na pasta WikiMetricsMain, para rodar o programa em c++ para manipulação desses dados e a geração dos gráficos.
 
-Comando para compilação pelo VS code: g++ -o main main.cpp JsonReader.cpp Human.cpp CalculateMetrics.cpp GenerateGraphics.cpp -I/home/ricardojjs/WikiMetrics/WikiMetricsMain/vcpkg/installed/x64-linux/include
-Logo após: ./main
+- Comando para compilação pelo VS code: g++ -o main main.cpp JsonReader.cpp Human.cpp CalculateMetrics.cpp GenerateGraphics.cpp -I/home/ricardojjs/WikiMetrics/WikiMetricsMain/vcpkg/installed/x64-linux/include
+- Logo após: ./main
 
 Este programa irá gerar arquivos txt de acordo com os gráficos existentes.
 
