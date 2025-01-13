@@ -1,7 +1,7 @@
 # WikiMetrics
 
 ## Objetivo Geral
-Desenvolver um protótipo funcional que leia e analise dados de pessoas presentes na Wikidata (base utilizada pela Wikipédia), utilizando arquivos JSON disponibilizados pela Wikidata. O sistema processará as informações para apresentar métricas relevantes de forma visual e interativa, permitindo uma melhor compreensão da distribuição demográfica e outras características dos indivíduos descritos.
+Desenvolver um protótipo funcional que leia e analise dados de pessoas presentes na Wikidata (base utilizada pela Wikipédia), utilizando uma base de dados disponibilizada pela Wikidata. O sistema processará as informações para apresentar métricas relevantes de forma visual e interativa, permitindo uma melhor compreensão da distribuição demográfica e outras características dos indivíduos descritos.
 
 ## Objetivos Específicos
 
