@@ -1,27 +1,57 @@
 #include <iostream>
+#include <unordered_map>
+#include <sstream>
 #include "CalculateMetrics.h"
 
-std::string CalculateMetrics::genderRatio(const std::vector<Human> &humans)
+std::unordered_map<std::string, int> CalculateMetrics::simpleItemRatio(const std::vector<Human> &humans)
 {
-    int men = 0;
-    int woman = 0;
-    int other = 0;
-    for (Human human : humans)
+    std::unordered_map<std::string, int> genderCount;
+
+    for (const Human &human : humans)
     {
-        if (human.getGender() == "masculino")
+        if (human.getGender().empty())
         {
-            men++;
+            continue;
         }
-        else if (human.getGender() == "feminino")
-        {
-            woman++;
+        genderCount[human.getGender()]++;
+    }
+    return genderCount;
+}
+
+std::unordered_map<std::string, int> CalculateMetrics::compositeItemRatio(const std::vector<Human> &humans, std::string item)
+{
+    std::unordered_map<std::string, int> itemCount;
+
+    for (const Human &human : humans)
+    {
+        std::string itens;
+        if(item == "religion"){
+            itens = human.getReligions();
         }
-        else
+        else if(item == "profession"){
+            itens = human.getProfessions();
+        }
+
+        if (itens.empty())
         {
-            other++;
+            continue;
+        }
+
+        std::istringstream ss(itens);
+        std::string itemFormated;
+        while (std::getline(ss, itemFormated, ','))
+        {
+            itemFormated.erase(0, itemFormated.find_first_not_of(" \t"));
+            itemFormated.erase(itemFormated.find_last_not_of(" \t") + 1);
+
+            if (!itemFormated.empty())
+            {
+                itemCount[itemFormated]++;
+            }
         }
     }
-    return "men," + std::to_string(men) + ",woman," + std::to_string(woman) + ",other," + std::to_string(other);
+
+    return itemCount;
 }
 
 int CalculateMetrics::averageAge(const std::vector<Human> &humans)
