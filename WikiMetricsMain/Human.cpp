@@ -5,7 +5,8 @@
 #include "Human.h"
 
 Human::Human(std::string name, std::string gender,
-             std::string birthDate, std::string deathDate, std::string professions, std::string religions)
+             std::string birthDate, std::string deathDate,
+             std::string professions, std::string religions)
     : name(name), gender(gender),
       birthDate(birthDate), professions(professions), religions(religions)
 {
@@ -115,8 +116,14 @@ void Human::toString() const
     {
         std::cout << "Dia do falecimento: " << getBirthDate() << std::endl;
     }
-    std::cout << "Profissões: " << getProfessions() << std::endl;
-    std::cout << "Religiões: " << getReligions() << std::endl;
+    for (int x = 0; x < getProfessions().size(); x++)
+    {
+        getProfessions()[x];
+    }
+    for (int x = 0; x < getReligions().size(); x++)
+    {
+        getReligions()[x];
+    }
 
     std::cout << "" << std::endl;
 };

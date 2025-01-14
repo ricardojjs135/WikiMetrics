@@ -22,7 +22,7 @@ base_query = """SELECT DISTINCT ?human ?humanLabel ?sex_or_genderLabel ?country_
   SERVICE wikibase:label {{ bd:serviceParam wikibase:language "pt-br". }}
   FILTER(?date_of_birth >= "{start_date}"^^xsd:dateTime && ?date_of_birth < "{end_date}"^^xsd:dateTime)
 }}
-LIMIT 8000
+LIMIT 9000
 OFFSET {offset}"""
 
 def get_results(endpoint_url, query):
@@ -32,7 +32,7 @@ def get_results(endpoint_url, query):
     sparql.setReturnFormat(JSON)
     try:
         response = sparql.query().response.read().decode("utf-8")
-        clean_response = response.replace("\n", "").replace("\r", "").replace("\t", "")  # Remover caracteres de controle
+        clean_response = response.replace("\n", "").replace("\r", "").replace("\t", "")  
         return json.loads(clean_response)
     except json.JSONDecodeError as e:
         print("Erro ao decodificar JSON após limpeza:", e)
@@ -80,6 +80,11 @@ def save_grouped_data(grouped_data, output_file):
 
     print(f"Dados do lote salvos no arquivo '{output_file}'")
 
+output_dir = "jsonFiles"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+    print(f"Pasta '{output_dir}' criada com sucesso.")
+
 def fetch_and_save_batches(endpoint_url, base_query, start_date, end_date):
     offset = 0
     batch = 1
@@ -89,7 +94,7 @@ def fetch_and_save_batches(endpoint_url, base_query, start_date, end_date):
 
         query = base_query.format(start_date=start_date, end_date=end_date, offset=offset)
 
-        output_file = f"wikidata_lote_{batch}_{start_date}_{end_date}.json"
+        output_file = os.path.join(output_dir, f"wikidata_lote_{batch}_{start_date}_{end_date}.json")
 
         if os.path.exists(output_file):
             print(f"Lote {batch} já existe. Pulando esse intervalo de datas.")
@@ -100,28 +105,27 @@ def fetch_and_save_batches(endpoint_url, base_query, start_date, end_date):
                 print("Nenhum resultado restante para esse intervalo de datas.")
                 break
 
-            grouped_data = group_attributes(results["results"]["bindings"])  # Processa os dados aqui
+            grouped_data = group_attributes(results["results"]["bindings"]) 
             print(f"Lote {batch} salvo com {len(results['results']['bindings'])} registros.")
 
 
-            if len(results["results"]["bindings"]) < 8000:
-                print("Último lote com menos de 8000 resultados. Finalizando.")
-                save_grouped_data(grouped_data, output_file)  # Salva os dados processados
+            if len(results["results"]["bindings"]) < 9000:
+                print("Último lote com menos de 9000 resultados. Finalizando.")
+                save_grouped_data(grouped_data, output_file)  
                 break
 
-            save_grouped_data(grouped_data, output_file)  # Salva os dados processados
+            save_grouped_data(grouped_data, output_file)  
 
-            offset += 8000  
+            offset += 9000  
             batch += 1
 
         time.sleep(15)
 
     print("Processamento concluído!")
 
-#start_date = "1646-01-01"
-#end_date = "1855-01-01"
-start_date = "1984-11-30"
-end_date = "1994-11-28"
+start_date = "1954-12-08"
+end_date = "1964-12-05"
+
 current_date = datetime.now()
 count_queries = 1;
 addition = 2;

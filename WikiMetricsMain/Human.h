@@ -2,6 +2,7 @@
 #define HUMAN_H
 
 #include <iostream>
+#include <vector>
 
 class Human {
 private:
@@ -14,7 +15,8 @@ private:
 
 public:
     Human(std::string name, std::string gender,
-          std::string birthDate, std::string deathDate = "", std::string professions = "", std::string religions = "");
+          std::string birthDate, std::string deathDate = "", 
+          std::string professions = "", std::string religions = "");
 
     std::string getName() const;
     std::string getGender() const;

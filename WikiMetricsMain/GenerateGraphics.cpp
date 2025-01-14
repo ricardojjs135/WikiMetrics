@@ -1,6 +1,6 @@
 #include "GenerateGraphics.h"
 #include <fstream>
-#include <iomanip> 
+#include <iomanip>
 
 void GenerateGraphics::generateBarChart(const std::unordered_map<std::string, int> &data, const std::string &fileName)
 {
@@ -11,10 +11,45 @@ void GenerateGraphics::generateBarChart(const std::unordered_map<std::string, in
         return;
     }
 
+    int total = 0;
+    for (const auto &entry : data)
+    {
+        total += entry.second;
+    }
+
+    if (total == 0)
+    {
+        file << "Não é possível gerar o gráfico de barra: total dos valores é zero.\n";
+        file.close();
+        return;
+    }
+
+    size_t categoryCount = data.size();
+    std::unordered_map<std::string, int> filteredData;
+    int otherTotal = 0;
+
+    for (const auto &entry : data)
+    {
+        double percentage = static_cast<double>(entry.second) / total * 100;
+        if (percentage > 5)
+        {
+            filteredData[entry.first] = entry.second;
+        }
+        else
+        {
+            otherTotal += entry.second;
+        }
+    }
+
+    if (otherTotal > 0)
+    {
+        filteredData["Outros"] = otherTotal;
+    }
+
     file << "Bar Chart\n";
     file << "==========\n";
 
-    for (const auto &entry : data)
+    for (const auto &entry : filteredData)
     {
         file << std::setw(15) << std::left << entry.first << " | ";
         for (int i = 0; i < entry.second; ++i)
@@ -40,7 +75,7 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
     int total = 0;
     for (const auto &entry : data)
     {
-        total += entry.second; 
+        total += entry.second;
     }
 
     if (total == 0)
@@ -66,7 +101,7 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
             }
             else
             {
-                otherTotal += entry.second; 
+                otherTotal += entry.second;
             }
         }
 
@@ -86,8 +121,8 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
     for (const auto &entry : filteredData)
     {
         double percentage = static_cast<double>(entry.second) / total * 100;
-        file << std::setw(15) << std::left << entry.first 
-             << " - " << std::fixed << std::setprecision(2) << percentage << "% (" 
+        file << std::setw(15) << std::left << entry.first
+             << " - " << std::fixed << std::setprecision(2) << percentage << "% ("
              << entry.second << ")\n";
     }
 
