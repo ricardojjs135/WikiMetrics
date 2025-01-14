@@ -30,6 +30,7 @@ std::vector<Human> JsonReader::parseHumans(const std::string &filePath)
             std::string deathDate = person_data.contains("date_of_death") && !person_data["date_of_death"].is_null() ? person_data["date_of_death"] : "";
             std::string professions = person_data.contains("professions") && !person_data["professions"].is_null() ? person_data["professions"] : "";
             std::string religions = person_data.contains("religions") && !person_data["religions"].is_null() ? person_data["religions"] : "";
+            std::string educations = person_data.contains("educations") && !person_data["educations"].is_null() ? person_data["educations"] : "";
 
             if (professions.find("Q36180") != std::string::npos || professions.find("Q628099") != std::string::npos)
             {
@@ -95,7 +96,35 @@ std::vector<Human> JsonReader::parseHumans(const std::string &filePath)
                 religions = new_religions;
             }
 
-            humans.push_back(Human(name, gender, birthDate, deathDate, professions, religions));
+            if (educations.find("Q1232831") != std::string::npos)
+            {
+                std::string new_educations;
+                std::istringstream stream(educations);
+                std::string education;
+                bool first = true;
+
+                while (std::getline(stream, education, ','))
+                {
+                    if (!first)
+                    {
+                        new_educations += ", ";
+                    }
+                    first = false;
+                    education = education.substr(education.find_first_not_of(" "), education.find_last_not_of(" ") + 1);
+                    if (education == "Q1232831")
+                    {
+                        new_educations += "Universidade Federal do Paraná";
+                    }
+                    else
+                    {
+                        new_educations += education;
+                    }
+                }
+
+                educations = new_educations;
+            }
+
+            humans.push_back(Human(name, gender, birthDate, deathDate, professions, religions, educations));
         }
     }
     else

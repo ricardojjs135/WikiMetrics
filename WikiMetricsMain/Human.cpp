@@ -6,9 +6,10 @@
 
 Human::Human(std::string name, std::string gender,
              std::string birthDate, std::string deathDate,
-             std::string professions, std::string religions)
-    : name(name), gender(gender),
-      birthDate(birthDate), professions(professions), religions(religions)
+             std::string professions, std::string religions,
+             std::string educations)
+    : name(name), gender(gender), birthDate(birthDate),
+      professions(professions), religions(religions), educations(educations)
 {
     if (deathDate.empty() || deathDate.size() > 20)
     {
@@ -43,6 +44,10 @@ std::string Human::getProfessions() const
 std::string Human::getReligions() const
 {
     return religions;
+};
+std::string Human::getEducations() const
+{
+    return educations;
 };
 
 int Human::calculateAge() const
@@ -116,14 +121,9 @@ void Human::toString() const
     {
         std::cout << "Dia do falecimento: " << getBirthDate() << std::endl;
     }
-    for (int x = 0; x < getProfessions().size(); x++)
-    {
-        getProfessions()[x];
-    }
-    for (int x = 0; x < getReligions().size(); x++)
-    {
-        getReligions()[x];
-    }
+    std::cout << "Profissão: " << getProfessions() << std::endl;
+    std::cout << "Religião: " << getReligions() << std::endl;
+    std::cout << "Educação: " << getEducations() << std::endl;
 
     std::cout << "" << std::endl;
 };

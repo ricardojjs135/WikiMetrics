@@ -95,7 +95,7 @@ void GenerateGraphics::generatePieChart(const std::unordered_map<std::string, in
         for (const auto &entry : data)
         {
             double percentage = static_cast<double>(entry.second) / total * 100;
-            if (percentage > 1.5)
+            if (percentage > 2.0)
             {
                 filteredData[entry.first] = entry.second;
             }

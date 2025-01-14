@@ -12,11 +12,13 @@ private:
     std::string deathDate;
     std::string professions;
     std::string religions;
+    std::string educations;
 
 public:
     Human(std::string name, std::string gender,
           std::string birthDate, std::string deathDate = "", 
-          std::string professions = "", std::string religions = "");
+          std::string professions = "", std::string religions = "",
+          std::string educations = "");
 
     std::string getName() const;
     std::string getGender() const;
@@ -24,6 +26,7 @@ public:
     std::string getDeathDate() const;
     std::string getProfessions() const;
     std::string getReligions() const;
+    std::string getEducations() const;
 
     int calculateAge() const;
     void toString() const;

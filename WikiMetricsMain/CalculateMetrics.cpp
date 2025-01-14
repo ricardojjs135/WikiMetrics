@@ -31,6 +31,9 @@ std::unordered_map<std::string, int> CalculateMetrics::compositeItemRatio(const 
         else if(item == "profession"){
             itens = human.getProfessions();
         }
+        else if(item == "education"){
+            itens = human.getEducations();
+        }
 
         if (itens.empty())
         {
