@@ -36,7 +36,7 @@ Após a execução do código, um conjunto de arquivos json serão gerados em um
 
 OBS: Os arquivos são gerados com intervalos de data, pois uma única query não seria possível rodar de uma vez pois o volume de dados é grande e daria timeout, mesmo com esses intervalos de datas o programa pode parar em algum momento, caso pare, basta alterar as variáveis start_date e end_date de acordo com o primeiro lote com a última data gerada mostrada no terminal, e rodar o script novamente, para ele continuar de onde parou.
 
-### `WikiMetricsMain`
+### WikiMetricsMain
 
 Após gerar o arquivo com os dados, entre na pasta WikiMetricsMain, para rodar o programa em c++ para manipulação desses dados e a geração dos gráficos.
 
@@ -47,7 +47,7 @@ Este programa irá gerar arquivos txt de acordo com os gráficos existentes.
 
 ### `GenerateGraphics.py`
 
-Após sair da pasta e voltar para o módulo principal do projeto, rode o script GenerateGraphics.py, através do comando “python3 GenerateGraphics.py”, este script irá gerar gráficos de acordo com os arquivos txt gerados pelo projeto WikiMetricsMain.
+Após sair da pasta e voltar para o módulo principal do projeto, rode o script `GenerateGraphics.py`, através do comando “python3 GenerateGraphics.py”, este script irá gerar gráficos de acordo com os arquivos txt gerados pelo projeto WikiMetricsMain.
 
   
 
