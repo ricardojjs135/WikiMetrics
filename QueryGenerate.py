@@ -123,8 +123,8 @@ def fetch_and_save_batches(endpoint_url, base_query, start_date, end_date):
 
     print("Processamento concluído!")
 
-start_date = "1954-12-08"
-end_date = "1964-12-05"
+start_date = "1646-01-01"
+end_date = "1855-01-01"
 
 current_date = datetime.now()
 count_queries = 1;
